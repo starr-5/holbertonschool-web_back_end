@@ -28,36 +28,34 @@ class Server:
         return self.__dataset
 
     def indexed_dataset(self) -> Dict[int, List]:
-        """Dataset indexed by sorting position."""
+        """Dataset indexed by sorting position, starting at 0."""
         if self.__indexed_dataset is None:
             dataset = self.dataset()
+            truncated_dataset = dataset[:1000]
             self.__indexed_dataset = {
                 i: dataset[i] for i in range(len(dataset))
             }
 
         return self.__indexed_dataset
 
-    def get_hyper_index(
-        self,
-        index: int = None,
-        page_size: int = 10
-    ) -> Dict:
+    def get_hyper_index(self, index: int = None,
+                        page_size: int = 10) -> Dict:
         """Return a deletion-resilient hypermedia page."""
         dataset = self.indexed_dataset()
 
         assert index is not None and 0 <= index < len(dataset)
 
         data = []
-        current_index = index
+        next_index = index
 
         while len(data) < page_size:
-            if current_index in dataset:
-                data.append(dataset[current_index])
-            current_index += 1
+            if next_index in dataset:
+                data.append(dataset[next_index])
+            next_index += 1
 
         return {
             "index": index,
-            "next_index": current_index,
+            "next_index": next_index,
             "page_size": len(data),
             "data": data
         }
