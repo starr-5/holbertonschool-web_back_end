@@ -13,7 +13,7 @@ class Server:
     DATA_FILE = "Popular_Baby_Names.csv"
 
     def __init__(self):
-        """Initialize server."""
+        """Initialize the server."""
         self.__dataset = None
         self.__indexed_dataset = None
 
@@ -38,8 +38,7 @@ class Server:
 
         return self.__indexed_dataset
 
-    def get_hyper_index(self, index: int = None,
-                        page_size: int = 10) -> Dict:
+    def get_hyper_index(self, index: int = None, page_size: int = 10) -> Dict:
         """Return a deletion-resilient hypermedia page."""
         dataset = self.indexed_dataset()
 
@@ -55,7 +54,7 @@ class Server:
 
         return {
             "index": index,
-            "next_index": next_index,
+            "data": data,
             "page_size": len(data),
-            "data": data
+            "next_index": next_index
         }
